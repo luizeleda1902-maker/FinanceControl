@@ -14,6 +14,7 @@ export default defineConfig({
       includeAssets: ['favicon.png'],
       devOptions: { enabled: true }, // registra o service worker também em `npm run dev`, não só no build
       manifest: {
+        lang: 'pt-BR',
         name: 'Finance Control',
         short_name: 'Finance Control',
         description:
