@@ -1,0 +1,40 @@
+/* Variáveis de cor globais do app (paleta + tipografia base). Trocar os
+   valores aqui muda a aparência do app inteiro de uma vez, já que todo o
+   CSS (App.css) usa var(--nome) em vez de cores fixas. */
+:root {
+  --primary: #22c55e;
+  --primary-dark: #16a34a;
+  --bg: #0a0f1a;
+  --card: #141d2b;
+  --text: #e8eaf0;
+  --text-muted: #8b96a8;
+  --border: #26313f;
+  --ok: #22c55e;
+  --warn: #f59e0b;
+  --danger: #ef4444;
+
+  font: 16px/1.45 system-ui, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+h1, h2, h3 {
+  margin: 0 0 8px;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+a {
+  color: var(--primary);
+}

@@ -1,0 +1,498 @@
+/* Estilos de layout e componentes reutilizáveis (cartões, botões, campos,
+   badges, barra de navegação, gráficos). As classes têm nomes descritivos
+   (.card, .btn, .badge-ok...) e são combinadas nas telas em src/pages/. */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  max-width: 480px;
+  margin: 0 auto;
+  background: var(--bg);
+}
+
+.topbar {
+  background: var(--primary);
+  color: #fff;
+  padding: 14px 16px;
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.topbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar-logo {
+  height: 38px;
+  width: 38px;
+  border-radius: 9px;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+}
+
+.topbar-title {
+  font-size: 24px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+.topbar-title-bold {
+  font-weight: 800;
+}
+
+.topbar-title-light {
+  font-weight: 300;
+  margin-left: 4px;
+}
+
+.btn-eye {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 6px;
+  line-height: 1;
+}
+
+.content {
+  flex: 1;
+  padding: 16px;
+  padding-bottom: 88px;
+}
+
+/* Envolve as rotas em App.tsx, com key={pathname} — troca de tela remonta
+   esse wrapper e a animação toca de novo, dando uma transição suave em vez
+   do conteúdo simplesmente "trocar" sem aviso. */
+.page-transition {
+  animation: page-fade-in 0.2s ease;
+}
+
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-transition { animation: none; }
+  .voz-mic { animation: none; }
+  .splash-logo { animation: none; }
+}
+
+/* Tela de abertura (ver components/SplashScreen.tsx). Fica por cima de
+   tudo (z-index alto) até os dados iniciais carregarem, depois some com
+   um fade controlado por JS (troca pra .splash-saindo). */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: var(--bg);
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.splash-saindo {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.splash-logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 24px;
+  animation: splash-pop 0.4s ease;
+}
+
+.splash-title {
+  font-size: 26px;
+  letter-spacing: 0.2px;
+  color: var(--text);
+}
+
+@keyframes splash-pop {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.bottomnav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-around;
+  padding: 6px 0 10px;
+}
+
+.navitem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 20px;
+  flex: 1;
+  transition: color 0.15s ease, transform 0.1s ease;
+}
+
+.navitem:active {
+  transform: scale(0.9);
+}
+
+.navitem small {
+  font-size: 11px;
+}
+
+.navitem.active {
+  color: var(--primary);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* Cards que também são links clicáveis (ex: lista de "Atenção necessária"
+   na Dashboard) ganham um leve efeito de elevação ao passar o mouse/tocar,
+   pra deixar claro que são clicáveis — cards puramente informativos (div,
+   sem link) não têm esse efeito. */
+a.card {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+a.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+
+a.card:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* Faixa colorida à esquerda dos cards de "Atenção necessária", pra dar
+   pra escanear visualmente a gravidade sem precisar ler o badge. */
+.card.att-ok { border-left: 3px solid var(--ok); }
+.card.att-atencao { border-left: 3px solid var(--warn); }
+.card.att-atrasada, .card.att-estourado { border-left: 3px solid var(--danger); }
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  text-decoration: none;
+  transition: transform 0.1s ease, box-shadow 0.15s ease, background-color 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:hover {
+  background: var(--primary-dark);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: var(--card);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.btn-secondary:hover {
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.btn-small {
+  width: auto;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.btn-danger {
+  background: var(--danger);
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+.field {
+  margin-bottom: 14px;
+}
+
+.field label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+  color: var(--text);
+}
+
+/* Ícone nativo do seletor de data/mês do navegador vem escuro por padrão —
+   fica invisível em cima do fundo escuro do campo, então invertemos pra
+   ficar claro. Só existe em navegadores baseados em WebKit/Blink (Chrome,
+   Edge, Android), que é o alvo do app. */
+.field input[type="date"]::-webkit-calendar-picker-indicator,
+.field input[type="month"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+.badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.badge-ok {
+  background: rgba(34, 197, 94, 0.18);
+  color: var(--ok);
+}
+
+.badge-warn {
+  background: rgba(245, 158, 11, 0.18);
+  color: var(--warn);
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.18);
+  color: var(--danger);
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  border-top: 3px solid transparent;
+}
+
+.stat-card:has(.num.ok) { border-top-color: var(--ok); }
+.stat-card:has(.num.warn) { border-top-color: var(--warn); }
+.stat-card:has(.num.danger) { border-top-color: var(--danger); }
+
+.stat-card .num {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.stat-card .num.ok {
+  color: var(--ok);
+}
+
+.stat-card .num.danger {
+  color: var(--danger);
+}
+
+.stat-card .num.warn {
+  color: var(--warn);
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 32px 16px;
+}
+
+/* Texto curto de ajuda logo abaixo do título de cada tela, explicando o
+   que fazer ali (ver componente AjudaTela.tsx). */
+.ajuda-tela {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: -8px 0 16px;
+}
+
+.search-box {
+  margin-bottom: 14px;
+}
+
+.fab-link {
+  margin-bottom: 16px;
+}
+
+.segmented {
+  display: flex;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px;
+  margin-bottom: 14px;
+}
+
+.segmented button {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.segmented button.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.progress-track {
+  background: var(--bg);
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.2s;
+}
+
+.progress-fill.ok { background: var(--ok); }
+.progress-fill.atencao { background: var(--warn); }
+.progress-fill.estourado { background: var(--danger); }
+
+.chart-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.chart-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.chart-label {
+  width: 92px;
+  flex-shrink: 0;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chart-track {
+  flex: 1;
+  background: var(--bg);
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.chart-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.chart-value {
+  width: 96px;
+  flex-shrink: 0;
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Tela "Lançamento por voz" (atalho de tela inicial, ver LancamentoPorVoz.tsx) */
+.voz-tela {
+  text-align: center;
+}
+
+.voz-card {
+  padding: 32px 16px;
+}
+
+.voz-mic {
+  font-size: 56px;
+  margin-bottom: 12px;
+  animation: voz-pulso 1.4s ease-in-out infinite;
+}
+
+.voz-check {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+@keyframes voz-pulso {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
